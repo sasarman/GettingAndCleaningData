@@ -8,46 +8,46 @@ output: html_document
 
 
 ### Running the script
-1. Install package "dplyr"
+* Install package "dplyr"
 ```
 install.packages("dplyr")
 ```
-2. Set the working directory to the location of your run_analysis.R script
+* Set the working directory to the location of your run_analysis.R script
 ```
 setwd("<path-to-your-script-directory>")
 ```
-3. Source the run_analysis.R script
+* Source the run_analysis.R script
 ```
 source("run_analysis.R")
 ```
-4. Output of the script is file **average_signals.txt** in the working directory
+* Output of the script is file **average_signals.txt** in the working directory
 
 
 
 ### How the script works
 1. The script starts by reading raw data from the data files:
-+ X_test.txt (test set measurements) is stored in **xTest** data frame
-+ y_test.txt (activity codes for test set) is stored in **yTest** data frame
-+ subject_test.txt (subjects for the test set) is stored in **subjectTest** data frame
-+ X_train.txt (train set measurements) is stored in **xTrain** data frame
-+ y_train.txt (activity codes for train set) is stored in **yTrain** data frame
-+ subject_train.txt (subjects for the train set) is stored in **subjectTrain** data frame
-+ activity_labels.txt (activity lookup table) is stored in **activityLabels** data frame
-+ features.txt (measurement labels) is stored in **features** data frame  
+* X_test.txt (test set measurements) is stored in **xTest** data frame
+*  y_test.txt (activity codes for test set) is stored in **yTest** data frame
+* subject_test.txt (subjects for the test set) is stored in **subjectTest** data frame
+* X_train.txt (train set measurements) is stored in **xTrain** data frame
+* y_train.txt (activity codes for train set) is stored in **yTrain** data frame
+* subject_train.txt (subjects for the train set) is stored in **subjectTrain** data frame
+* activity_labels.txt (activity lookup table) is stored in **activityLabels** data frame
+* features.txt (measurement labels) is stored in **features** data frame  
 Each data frame is inspected using the dim() and str() fucntions
 
-2. The Train and Test measurement sets are then merged together using the rbin() function (in that order).  
+2. The Train and Test measurement sets are then merged together using the rbind() function (in that order).  
 The combined result is stored in **xData**, a 10299 x 561 data frame.
 
 3. The mean() and std() measurements are extracted from the xData set and stored in **xDataClipped** data frame
-+ Start by using grep() function to find the column numbers that match mean() or std() in the labels for the features data frame (second column of the data frame). Result is saved as *myColumns*.
-+ Since same columns are used in the combined xData frame, we can subset this data frames by those columns to obtain the reduced data frame *xDataClipped* that contains only variables on interest.
-+ The reduced data frame *xDataClipped* is of size 10299 x 66
+* Start by using grep() function to find the column numbers that match mean() or std() in the labels for the features data frame (second column of the data frame). Result is saved as *myColumns*.
+* Since same columns are used in the combined xData frame, we can subset this data frames by those columns to obtain the reduced data frame *xDataClipped* that contains only variables on interest.
+* The reduced data frame *xDataClipped* is of size 10299 x 66
 
 4. Bind 2 left-most columns with activity codes and subjects from both sets to the reduced data set
-+ The activity codes from train and test sets are bound together (in that order) using rbind() function
-+ The subjects from train and test sets are bound together (in that order) using rbind() function
-+ Then finally the activity codes and subects are boud to the reduced frame using cbind() function
+* The activity codes from train and test sets are bound together (in that order) using rbind() function
+* The subjects from train and test sets are bound together (in that order) using rbind() function
+* Then finally the activity codes and subects are boud to the reduced frame using cbind() function
 The result is stored in **myData**, which is now a 10299 x 68 data frame
 
 5. Replace activity codes with descriptive activity names in the data set
