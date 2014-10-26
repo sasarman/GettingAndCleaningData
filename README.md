@@ -51,7 +51,7 @@ The combined result is stored in **xData**, a 10299 x 561 data frame.
 The result is stored in **myData**, which is now a 10299 x 68 data frame  
 
 5. Replace activity codes with descriptive activity names in the data set
-In order to do that we use the activityLevels data set, which is in essence a lookup table for the activities.  using a for loop, we will iterate over all the codes in activityLevels and replace them in the **myData** data set with corresponding names, like this ```myData[1][myData[1]==code] <- as.character(activityLevels[code,2])```
+In order to do that we use the activityLevels data set, which is in essence a lookup table for the activities.  Using a for loop, we will iterate over all the codes in activityLevels and replace them in the **myData** data set with corresponding names, like this ```myData[1][myData[1]==code] <- as.character(activityLevels[code,2])```
 To validate this step of transformations, we run ```table(myData[,1])``` command before and after replacement; result needs to be identical.
 
 6. Label the data set with descriptive variable names  
@@ -60,4 +60,4 @@ To do that, we create vector **myColumnsNames** as a concatenation of "Activity"
 7. For the final step, we create another tidy data set with the average of each variable for each activity and each subject
 This is accomplished using the *dplyr* package, bu chaing functions ```group_by(Activity,Subject)``` and ```summarise_each(funs(mean))``` on the *myData* set.  
 The result is stored in **avgByActivitySubject**, a 180 x 68 data frame.  
-The final data set is written to **average_signals.txt** file using the wtite.table() function.  
+The final data set is written to **average_signals.txt** file using the write.table() function.  
