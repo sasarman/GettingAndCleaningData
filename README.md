@@ -55,9 +55,13 @@ In order to do that we use the activityLevels data set, which is in essence a lo
 To validate this step of transformations, we run ```table(myData[,1])``` command before and after replacement; result needs to be identical.
 
 6. Label the data set with descriptive variable names  
-To do that, we create vector **myColumnsNames** as a concatenation of "Activity", "Subject" and the feature labels obtained at step 3 *myColumns[,2]*.  This vector is then applied to the *myData* set using the names() function.
+To do that, we start with feature labels obtained at step 3 *myColumns[,2]*.  We then apply a series of 8 transformations to the labels, substituting abbreviations and short names with more descriptive names. These transformation are made through a series of lapply() and gsub() functions.  
+To get the full header set, names "Activity" and "Subject" are concatenated to the header set.  
+The header set is then applied to our data set using the names() function.  
 
-7. For the final step, we create another tidy data set with the average of each variable for each activity and each subject
-This is accomplished using the *dplyr* package, bu chaing functions ```group_by(Activity,Subject)``` and ```summarise_each(funs(mean))``` on the *myData* set.  
+
+7. For the final step, we create another tidy data set with the average of each variable for each activity and each subject.  
+This is accomplished using the *dplyr* package, by chaining functions ```group_by(Activity,Subject)``` and ```summarise_each(funs(mean))``` on the *myData* set.  
 The result is stored in **avgByActivitySubject**, a 180 x 68 data frame.  
-The final data set is written to **average_signals.txt** file using the write.table() function.  
+The measurement variable names is prepended with string "Average-" to illustrate the averaging of signal values from the original data set.  
+The tidy data set is written to **average_signals.txt** file using the write.table() function.  

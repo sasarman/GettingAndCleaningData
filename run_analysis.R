@@ -55,7 +55,7 @@ myColumns <- features[grep("mean\\(|std\\(",features[,2]),]
 dim(myColumns) # 66 x 2
 #str(myColumns)
 myColumns[,1] # numbers
-myColumns[,2] # descriptive names
+myColumns[,2] # labels
 # last, this is the reduced data set, containing only my columns (66 columns)
 xDataClipped <- xData[,myColumns[,1]]
 dim(xDataClipped) # 10299 x 66
@@ -80,11 +80,20 @@ table(myData[,1]) # same values as prior table
 
 
 # S4: label the data set with descriptive variable names
-myColumnNames <- c("Activity","Subject",as.vector(myColumns[,2]))
+# start with labels and apply pattern substitution to create descriptive names
+t1 <- lapply(myColumns[,2],function(x) gsub("Acc","Acceleration",x))
+t2 <- lapply(t1,function(x) gsub("Gyro","Gyroscope",x))
+t3 <- lapply(t2,function(x) gsub("tBody","timeBody",x))
+t4 <- lapply(t3,function(x) gsub("tGravity","timeGravity",x))
+t5 <- lapply(t4,function(x) gsub("fBody","fftBody",x))
+t6 <- lapply(t5,function(x) gsub("fGravity","fftGravity",x))
+t7 <- lapply(t6,function(x) gsub("-mean\\(\\)","Mean",x))
+t8 <- lapply(t7,function(x) gsub("-std\\(\\)","Std",x))
+t8
+# concatenate Activity and Subject to get full headers and apply to data set
+myColumnNames <- c("Activity","Subject",as.vector(t8))
 myColumnNames
 names(myData) <- myColumnNames
-#str(myData)  # see the descriptive variable names?
-dim(myData)
 
 
 # S5: create another tidy data set with the average of each variable 
@@ -94,7 +103,13 @@ library(dplyr)
 avgByActivitySubject <- myData %>%
     group_by(Activity,Subject) %>%        
     summarise_each(funs(mean))
-
 #str(avgByActivitySubject)
 dim(avgByActivitySubject)  #180 x 68
+
+# update variable names to reflect averge of grouping
+t9 <- lapply(myColumnNames,function(x) gsub("fft","Average-FFT",x))
+t10 <- lapply(t9,function(x) gsub("time","Average-Time",x))
+names(avgByActivitySubject) <- t10
+
+# write data set to .txt file
 write.table(avgByActivitySubject, file="average_signals.txt", row.names=FALSE)
